@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SidebarMenu({ setDetailView }) {
+export default function SidebarMenu({ setDetailViewUrl }) {
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
@@ -36,7 +36,7 @@ export default function SidebarMenu({ setDetailView }) {
 
   const handleDetailView = url => {
     console.log(url);
-    setDetailView(url);
+    setDetailViewUrl(url);
   };
 
   const renderSiteLink = item => {
