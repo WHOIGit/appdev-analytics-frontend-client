@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { subDays, format } from "date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SidebarMenu({ setDetailViewUrl }) {
+export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
@@ -35,8 +36,13 @@ export default function SidebarMenu({ setDetailViewUrl }) {
   };
 
   const handleDetailView = url => {
-    console.log(url);
     setDetailViewUrl(url);
+  };
+
+  const handleReportFilter = daysAgo => {
+    const startDate = format(subDays(new Date(), daysAgo), "yyyy-MM-dd");
+    const query = `?start_date=${startDate}`;
+    setQuery(query);
   };
 
   const renderSiteLink = item => {
@@ -84,24 +90,24 @@ export default function SidebarMenu({ setDetailViewUrl }) {
       <Divider />
       <List>
         <div>
-          <ListSubheader inset>Saved reports</ListSubheader>
-          <ListItem button>
+          <ListSubheader inset>Reports</ListSubheader>
+          <ListItem button onClick={() => handleReportFilter(7)}>
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="Current month" />
+            <ListItemText primary="Last week" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => handleReportFilter(30)}>
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="Last quarter" />
+            <ListItemText primary="Last 30 days" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => handleReportFilter(90)}>
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="Year-end sale" />
+            <ListItemText primary="Last 90 days" />
           </ListItem>
         </div>
       </List>

@@ -10,24 +10,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 // local imports
 import SidebarMenu from "./SidebarMenu";
-import ViewHome from "./ViewHome";
-import ViewDetail from "./ViewDetail";
+import HomeView from "./HomeView";
+import DetailView from "./DetailView";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
+      WHOI IS AppDev {new Date().getFullYear()}
     </Typography>
   );
 }
@@ -109,7 +104,9 @@ export default function Dashboard() {
 
   const [openDrawer, setOpenDrawer] = useState(true);
   const [detailViewUrl, setDetailViewUrl] = useState(null);
-
+  const [query, setQuery] = useState(
+    "?omit=download_results&metrics=screenPageViews,activeUsers"
+  );
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
   };
@@ -143,7 +140,7 @@ export default function Dashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            WHOI Research Site Analytics
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -168,13 +165,17 @@ export default function Dashboard() {
           </IconButton>
         </div>
         {/* SidebarMenu component */}
-        <SidebarMenu setDetailViewUrl={setDetailViewUrl} />
+        <SidebarMenu setDetailViewUrl={setDetailViewUrl} setQuery={setQuery} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {detailViewUrl ? <ViewDetail url={detailViewUrl} /> : <ViewHome />}
+            {detailViewUrl ? (
+              <DetailView url={detailViewUrl} query={query} />
+            ) : (
+              <HomeView query={query} />
+            )}
           </Grid>
           <Box pt={4}>
             <Copyright />

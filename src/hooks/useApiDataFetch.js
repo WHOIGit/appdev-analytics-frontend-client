@@ -13,6 +13,7 @@ export default function useApiDataFetch(initialUrl, initialData) {
       setIsLoading(true);
 
       try {
+        console.log(url);
         const result = await axios(url);
         console.log(result);
         setData(result.data);
