@@ -37,6 +37,7 @@ export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
 
   const handleDetailView = url => {
     setDetailViewUrl(url);
+    setQuery("");
   };
 
   const handleReportFilter = daysAgo => {

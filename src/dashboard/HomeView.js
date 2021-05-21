@@ -9,8 +9,7 @@ import Title from "./Title";
 import TableGaData from "./TableGaData";
 import useApiDataFetch from "../hooks/useApiDataFetch";
 
-const defaultQuery =
-  "omit=download_results&metrics=screenPageViews,activeUsers";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,16 +25,12 @@ export default function HomeView({ query }) {
   const chartHeight = { height: 250 };
   console.log(query);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
-    `http://localhost:8000/api/websites/${query}`,
+    `${API_URL}${query}`,
     null
   );
 
   useEffect(() => {
-    let newQuery = query;
-    if (!query.includes(defaultQuery)) {
-      newQuery = query + "&" + defaultQuery;
-    }
-    doFetch(`http://localhost:8000/api/websites/${newQuery}`);
+    doFetch(`${API_URL}${query}`);
   }, [query]);
 
   const renderDataCharts = site => {

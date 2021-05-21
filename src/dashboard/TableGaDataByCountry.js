@@ -17,15 +17,21 @@ export default function TableGaDataByCountry({ data }) {
   console.log(data);
   const classes = useStyles();
 
+  if (!data) {
+    return null;
+  }
+
   // format GA data for tabular display
   const tableData = data.ga_results.rows.map(item => {
     const tableRow = {
       country: item.dimension_values[0].value,
-      activeUsers: item.metric_values[0].value
+      activeUsers: item.metric_values[0].value,
+      screenPageViews: item.metric_values[1].value
     };
     return tableRow;
   });
   console.log(tableData);
+
   return (
     <React.Fragment>
       <Title>Google Analytics User Data</Title>
@@ -34,6 +40,7 @@ export default function TableGaDataByCountry({ data }) {
           <TableRow>
             <TableCell>Country</TableCell>
             <TableCell>Active Users</TableCell>
+            <TableCell>Page Views</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,6 +48,7 @@ export default function TableGaDataByCountry({ data }) {
             <TableRow key={index}>
               <TableCell>{row.country}</TableCell>
               <TableCell>{row.activeUsers}</TableCell>
+              <TableCell>{row.screenPageViews}</TableCell>
             </TableRow>
           ))}
         </TableBody>

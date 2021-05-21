@@ -104,9 +104,7 @@ export default function Dashboard() {
 
   const [openDrawer, setOpenDrawer] = useState(true);
   const [detailViewUrl, setDetailViewUrl] = useState(null);
-  const [query, setQuery] = useState(
-    "?omit=download_results&metrics=screenPageViews,activeUsers"
-  );
+  const [query, setQuery] = useState("");
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
   };

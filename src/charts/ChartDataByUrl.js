@@ -3,6 +3,7 @@ import { ResponsiveLine } from "@nivo/line";
 
 export default function ChartDataByUrl({ siteData, chartHeight }) {
   console.log(siteData);
+  const chartData = [];
 
   const groups = siteData.download_results.reduce((groups, item) => {
     const group = groups[item.url] || [];
@@ -11,7 +12,6 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
     return groups;
   }, {});
 
-  const chartData = [];
   for (let [key, value] of Object.entries(groups)) {
     const dataRow = { id: key, data: [] };
     dataRow.data = value.map(item => {
