@@ -13,9 +13,11 @@ import WebIcon from "@material-ui/icons/Web";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import StarBorder from "@material-ui/icons/StarBorder";
+import LanguageIcon from "@material-ui/icons/Language";
 // local imports
 import useApiDataFetch from "../hooks/useApiDataFetch";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles(theme => ({
   nested: {
@@ -27,7 +29,7 @@ export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
-    "http://localhost:8000/api/websites/?fields=id,url,name",
+    `${API_URL}?fields=id,url,name`,
     null
   );
 
@@ -55,7 +57,7 @@ export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
         onClick={() => handleDetailView(item.url)}
       >
         <ListItemIcon>
-          <StarBorder />
+          <LanguageIcon />
         </ListItemIcon>
         <ListItemText primary={item.name} />
       </ListItem>
@@ -78,7 +80,7 @@ export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
             <ListItemIcon>
               <WebIcon />
             </ListItemIcon>
-            <ListItemText primary="Websites" />
+            <ListItemText primary="Research Sites" />
             {openSubmenu ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openSubmenu} timeout="auto" unmountOnExit>

@@ -6,9 +6,11 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
   const chartData = [];
 
   const groups = siteData.download_results.reduce((groups, item) => {
-    const group = groups[item.url] || [];
-    group.push(item);
-    groups[item.url] = group;
+    if (item.url.includes("services")) {
+      const group = groups[item.url] || [];
+      group.push(item);
+      groups[item.url] = group;
+    }
     return groups;
   }, {});
 
@@ -29,7 +31,7 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
   return (
     <div style={chartHeight} className="App">
       <ResponsiveLine
-        data={chartData.slice(0, 2)}
+        data={chartData}
         margin={{ top: 20, right: 120, bottom: 50, left: 60 }}
         xScale={{
           type: "time",

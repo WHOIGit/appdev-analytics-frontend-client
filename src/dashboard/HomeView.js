@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 // local imports
 import ChartTotalData from "../charts/ChartTotalData";
 import Title from "./Title";
@@ -17,6 +19,10 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column"
+  },
+  loading: {
+    padding: theme.spacing(2),
+    textAlign: "center"
   }
 }));
 
@@ -44,15 +50,23 @@ export default function HomeView({ query }) {
 
   return (
     <>
-      <Grid item xs={12} md={4}>
-        {data && data.map(item => renderDataCharts(item))}
-      </Grid>
+      {isLoading ? (
+        <Grid item xs={12} className={classes.loading}>
+          <CircularProgress />
+        </Grid>
+      ) : (
+        <>
+          <Grid item xs={12} md={4}>
+            {data && data.map(item => renderDataCharts(item))}
+          </Grid>
 
-      <Grid item xs={12}>
-        <Paper className={classes.paper}>
-          {data && <TableGaData data={data} />}
-        </Paper>
-      </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              {data && <TableGaData data={data} />}
+            </Paper>
+          </Grid>
+        </>
+      )}
     </>
   );
 }
