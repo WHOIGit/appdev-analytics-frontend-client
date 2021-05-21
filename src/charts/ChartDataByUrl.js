@@ -3,15 +3,6 @@ import { ResponsiveLine } from "@nivo/line";
 
 export default function ChartDataByUrl({ siteData, chartHeight }) {
   console.log(siteData);
-  const chartData = [{ id: "Daily Downloads", data: [] }];
-  chartData[0].data = siteData.total_daily_download_results.map(item => {
-    // convert bytes to MB
-    const point = {
-      x: item.date,
-      y: item.bytes_sent / 1e6
-    };
-    return point;
-  });
 
   const groups = siteData.download_results.reduce((groups, item) => {
     const group = groups[item.url] || [];
@@ -20,15 +11,26 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
     return groups;
   }, {});
 
+  const chartData = [];
   for (let [key, value] of Object.entries(groups)) {
-    console.log(key, value);
+    const dataRow = { id: key, data: [] };
+    dataRow.data = value.map(item => {
+      // convert bytes to MB
+      const point = {
+        x: item.date,
+        y: item.bytes_sent / 1e6
+      };
+      return point;
+    });
+    chartData.push(dataRow);
   }
+  console.log(chartData);
 
   return (
     <div style={chartHeight} className="App">
       <ResponsiveLine
-        data={chartData}
-        margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
+        data={chartData.slice(0, 2)}
+        margin={{ top: 20, right: 120, bottom: 50, left: 60 }}
         xScale={{
           type: "time",
           format: "%Y-%m-%d"
@@ -68,6 +70,32 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
         pointLabel="y"
         pointLabelYOffset={-12}
         useMesh={true}
+        legends={[
+          {
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            translateX: 100,
+            translateY: 0,
+            itemsSpacing: 2,
+            itemDirection: "left-to-right",
+            itemWidth: 80,
+            itemHeight: 12,
+            itemOpacity: 0.75,
+            symbolSize: 12,
+            symbolShape: "circle",
+            symbolBorderColor: "rgba(0, 0, 0, .5)",
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemBackground: "rgba(0, 0, 0, .03)",
+                  itemOpacity: 1
+                }
+              }
+            ]
+          }
+        ]}
       />
     </div>
   );
