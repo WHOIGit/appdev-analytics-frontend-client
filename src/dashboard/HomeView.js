@@ -41,10 +41,12 @@ export default function HomeView({ query }) {
 
   const renderDataCharts = site => {
     return (
-      <Paper className={classes.paper} key={site.id}>
-        <Title>{site.name}</Title>
-        <ChartTotalData siteData={site} chartHeight={chartHeight} />
-      </Paper>
+      <Grid item xs={12} md={4} key={site.id}>
+        <Paper className={classes.paper}>
+          <Title>{site.name}</Title>
+          <ChartTotalData siteData={site} chartHeight={chartHeight} />
+        </Paper>
+      </Grid>
     );
   };
 
@@ -56,9 +58,7 @@ export default function HomeView({ query }) {
         </Grid>
       ) : (
         <>
-          <Grid item xs={12} md={4}>
-            {data && data.map(item => renderDataCharts(item))}
-          </Grid>
+          {data && data.map(item => renderDataCharts(item))}
 
           <Grid item xs={12}>
             <Paper className={classes.paper}>

@@ -28,12 +28,12 @@ export default function TableGaData({ data }) {
     tableRow.topCountry = item.ga_results.rows[0].dimension_values[0].value;
 
     const activeUsers = item.ga_results.rows
-      .map(row => parseInt(row.metric_values[1].value))
+      .map(row => parseInt(row.metric_values[0].value))
       .reduce((a, b) => a + b, 0);
     tableRow.activeUsers = activeUsers;
 
     const pageViews = item.ga_results.rows
-      .map(row => parseInt(row.metric_values[0].value))
+      .map(row => parseInt(row.metric_values[1].value))
       .reduce((a, b) => a + b, 0);
     tableRow.pageViews = pageViews;
 
