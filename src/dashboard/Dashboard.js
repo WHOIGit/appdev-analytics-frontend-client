@@ -170,7 +170,7 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {detailViewUrl ? (
-              <DetailView url={detailViewUrl} query={query} />
+              <DetailView detailViewUrl={detailViewUrl} query={query} />
             ) : (
               <HomeView query={query} />
             )}

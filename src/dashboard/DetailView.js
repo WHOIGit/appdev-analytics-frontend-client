@@ -24,14 +24,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function DetailView({ url, query }) {
+export default function DetailView({ detailViewUrl, query }) {
   const classes = useStyles();
   const chartHeight = { height: 350 };
-  const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(url, null);
+  const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
+    detailViewUrl,
+    null
+  );
 
   useEffect(() => {
-    doFetch(`${url}${query}`);
-  }, [query]);
+    doFetch(`${detailViewUrl}${query}`);
+  }, [detailViewUrl, query]);
 
   if (!data) {
     return null;
