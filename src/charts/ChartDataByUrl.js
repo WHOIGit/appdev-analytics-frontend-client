@@ -15,7 +15,12 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
   }, {});
 
   for (let [key, value] of Object.entries(groups)) {
-    const dataRow = { id: key, data: [] };
+    const dataRow = { id: key, total_bytes: 0, data: [] };
+    // Get total bytes sent
+    dataRow.total_bytes = value
+      .map(item => item.bytes_sent / 1e6) // convert bytes to MB
+      .reduce((a, b) => a + b, 0);
+
     dataRow.data = value.map(item => {
       // convert bytes to MB
       const point = {
@@ -26,12 +31,16 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
     });
     chartData.push(dataRow);
   }
+  // sort array to get top download URLs
+  chartData.sort((a, b) => (a.total_bytes < b.total_bytes ? 1 : -1));
   console.log(chartData);
+  // get top N download urls
+  const slicedChartData = chartData.slice(0, 10);
 
   return (
     <div style={chartHeight} className="App">
       <ResponsiveLine
-        data={chartData}
+        data={slicedChartData}
         margin={{ top: 20, right: 120, bottom: 50, left: 60 }}
         xScale={{
           type: "time",
