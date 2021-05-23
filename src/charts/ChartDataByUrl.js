@@ -6,11 +6,10 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
   const chartData = [];
 
   const groups = siteData.download_results.reduce((groups, item) => {
-    if (item.url.includes("services")) {
-      const group = groups[item.url] || [];
-      group.push(item);
-      groups[item.url] = group;
-    }
+    const group = groups[item.url] || [];
+    group.push(item);
+    groups[item.url] = group;
+
     return groups;
   }, {});
 
