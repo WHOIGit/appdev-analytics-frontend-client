@@ -1,10 +1,11 @@
 import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 
-export default function ChartDataByUrl({ siteData, chartHeight }) {
+export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
   console.log(siteData);
+  // format API data for chart dispaly
   const chartData = [];
-
+  // Group the data by URL to create different time series
   const groups = siteData.download_results.reduce((groups, item) => {
     const group = groups[item.url] || [];
     group.push(item);
@@ -12,26 +13,39 @@ export default function ChartDataByUrl({ siteData, chartHeight }) {
 
     return groups;
   }, {});
-
+  // iterate through the time series objects to calculate total_data for sorting,
+  // then format chartData rows for Nivo chart
   for (let [key, value] of Object.entries(groups)) {
-    const dataRow = { id: key, total_bytes: 0, data: [] };
+    const dataRow = { id: key, total_data: 0, data: [] };
     // Get total bytes sent
-    dataRow.total_bytes = value
-      .map(item => item.bytes_sent / 1e6) // convert bytes to MB
+    dataRow.total_data = value
+      .map(item => {
+        let data = item[dataMetric];
+        // convert bytes to MB if "bytes_sent"
+        if (dataMetric === "bytes_sent") {
+          data = data / 1e6;
+        }
+        return data;
+      })
       .reduce((a, b) => a + b, 0);
 
     dataRow.data = value.map(item => {
-      // convert bytes to MB
+      let data = item[dataMetric];
+      // convert bytes to MB if "bytes_sent"
+      if (dataMetric === "bytes_sent") {
+        data = data / 1e6;
+      }
+
       const point = {
         x: item.date,
-        y: item.bytes_sent / 1e6
+        y: data
       };
       return point;
     });
     chartData.push(dataRow);
   }
   // sort array to get top download URLs
-  chartData.sort((a, b) => (a.total_bytes < b.total_bytes ? 1 : -1));
+  chartData.sort((a, b) => (a.total_data < b.total_data ? 1 : -1));
   console.log(chartData);
   // get top N download urls
   const slicedChartData = chartData.slice(0, 10);

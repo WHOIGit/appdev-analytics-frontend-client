@@ -167,7 +167,7 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
           <Grid container spacing={3}>
             {detailViewUrl ? (
               <DetailView detailViewUrl={detailViewUrl} query={query} />

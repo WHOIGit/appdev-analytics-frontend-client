@@ -58,7 +58,11 @@ export default function DetailView({ detailViewUrl, query }) {
           <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>
               <Title>Data Downloads by URL</Title>
-              <ChartDataByUrl siteData={data} chartHeight={chartHeight} />
+              <ChartDataByUrl
+                siteData={data}
+                dataMetric={"bytes_sent"}
+                chartHeight={chartHeight}
+              />
             </Paper>
           </Grid>
 
