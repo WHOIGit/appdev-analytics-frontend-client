@@ -38,7 +38,7 @@ export default function HomeView({ query }) {
   console.log(data);
   useEffect(() => {
     doFetch(API_URL, query);
-  }, [query]);
+  }, [query, doFetch]);
 
   const renderDataCharts = site => {
     return (

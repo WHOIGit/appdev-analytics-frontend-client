@@ -35,7 +35,7 @@ export default function DetailView({ detailViewUrl, query }) {
 
   useEffect(() => {
     doFetch(detailViewUrl, query);
-  }, [detailViewUrl, query]);
+  }, [detailViewUrl, query, doFetch]);
 
   if (!data) {
     return null;
@@ -82,7 +82,9 @@ export default function DetailView({ detailViewUrl, query }) {
 
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <TableGaDataByCountry data={data} />
+              {data.ga_results.rows.length && (
+                <TableGaDataByCountry data={data} />
+              )}
             </Paper>
           </Grid>
         </>

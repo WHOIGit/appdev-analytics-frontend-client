@@ -25,6 +25,9 @@ export default function TableGaData({ data }) {
       activeUsers: "",
       pageViews: ""
     };
+    if (!item.ga_results.rows.length) {
+      return tableRow;
+    }
     tableRow.topCountry = item.ga_results.rows[0].dimension_values[0].value;
 
     const activeUsers = item.ga_results.rows
