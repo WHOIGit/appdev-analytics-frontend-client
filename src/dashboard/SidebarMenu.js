@@ -25,12 +25,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
+export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
-    `${API_URL}?fields=id,url,name`,
-    null
+    API_URL,
+    query
   );
 
   const handleSubmenuClick = () => {
@@ -39,13 +39,15 @@ export default function SidebarMenu({ setDetailViewUrl, setQuery }) {
 
   const handleDetailView = url => {
     setDetailViewUrl(url);
-    setQuery("");
+    //setQuery("");
   };
 
   const handleReportFilter = daysAgo => {
-    const startDate = format(subDays(new Date(), daysAgo), "yyyy-MM-dd");
-    const query = `?start_date=${startDate}`;
-    setQuery(query);
+    const startDate = subDays(new Date(), daysAgo);
+    setQuery(prevQuery => ({
+      ...prevQuery,
+      startDate: startDate
+    }));
   };
 
   const renderSiteLink = item => {

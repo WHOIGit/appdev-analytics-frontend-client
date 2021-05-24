@@ -29,11 +29,11 @@ export default function DetailView({ detailViewUrl, query }) {
   const chartHeight = { height: 350 };
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
     detailViewUrl,
-    null
+    query
   );
 
   useEffect(() => {
-    doFetch(`${detailViewUrl}${query}`);
+    doFetch(detailViewUrl, query);
   }, [detailViewUrl, query]);
 
   if (!data) {

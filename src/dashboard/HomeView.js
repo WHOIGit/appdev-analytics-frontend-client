@@ -31,12 +31,13 @@ export default function HomeView({ query }) {
   const chartHeight = { height: 250 };
   console.log(query);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
-    `${API_URL}${query}`,
-    null
+    API_URL,
+    query
   );
 
+  console.log(data);
   useEffect(() => {
-    doFetch(`${API_URL}${query}`);
+    doFetch(API_URL, query);
   }, [query]);
 
   const renderDataCharts = site => {

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
+import { subDays, format } from "date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
+import Chip from "@material-ui/core/Chip";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -15,6 +17,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 // local imports
 import SidebarMenu from "./SidebarMenu";
+import DatePicker from "./DatePicker";
 import HomeView from "./HomeView";
 import DetailView from "./DetailView";
 
@@ -96,15 +99,30 @@ const useStyles = makeStyles(theme => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4)
+  },
+  dateChip: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: theme.spacing(4)
   }
 }));
+
+const DEFAULT_START_DAYSAGO = process.env.REACT_APP_DEFAULT_START_DAYSAGO;
+const defaultStartDate = subDays(new Date(), DEFAULT_START_DAYSAGO);
+const defaultEndDate = new Date();
 
 export default function Dashboard() {
   const classes = useStyles();
 
   const [openDrawer, setOpenDrawer] = useState(true);
   const [detailViewUrl, setDetailViewUrl] = useState(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState({
+    startDate: defaultStartDate,
+    endDate: defaultEndDate
+  });
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [endDate, setEndDate] = useState(defaultEndDate);
+
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
   };
@@ -163,11 +181,33 @@ export default function Dashboard() {
           </IconButton>
         </div>
         {/* SidebarMenu component */}
-        <SidebarMenu setDetailViewUrl={setDetailViewUrl} setQuery={setQuery} />
+        <SidebarMenu
+          setDetailViewUrl={setDetailViewUrl}
+          query={query}
+          setQuery={setQuery}
+        />
+        <DatePicker
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          query={query}
+          setQuery={setQuery}
+        />
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" className={classes.container}>
+          <div className={classes.dateChip}>
+            <Chip
+              label={`Selected Date Range: ${format(
+                query.startDate,
+                "MM/dd/yyyy"
+              )} - ${format(query.endDate, "MM/dd/yyyy")}`}
+            />
+          </div>
+
           <Grid container spacing={3}>
             {detailViewUrl ? (
               <DetailView detailViewUrl={detailViewUrl} query={query} />
