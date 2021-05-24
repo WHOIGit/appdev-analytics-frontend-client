@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function DetailView({ detailViewUrl, query }) {
   const classes = useStyles();
-  const chartHeight = { height: 350 };
+  const mainchartHeight = { height: 350 };
+  const detailChartHeight = { height: 550 };
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
     detailViewUrl,
     query
@@ -48,20 +49,33 @@ export default function DetailView({ detailViewUrl, query }) {
         </Grid>
       ) : (
         <>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Title>Total Data Downloads</Title>
-              <ChartTotalData siteData={data} chartHeight={chartHeight} />
+              <ChartTotalData siteData={data} chartHeight={mainchartHeight} />
             </Paper>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>
-              <Title>Data Downloads by URL</Title>
+              <Title>Top 10 Data Downloads by URL</Title>
               <ChartDataByUrl
                 siteData={data}
                 dataMetric={"bytes_sent"}
-                chartHeight={chartHeight}
+                chartHeight={detailChartHeight}
+                key={"bytes_sent"}
+              />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Paper className={classes.paper}>
+              <Title>Top 10 Hits by URL</Title>
+              <ChartDataByUrl
+                siteData={data}
+                dataMetric={"hits"}
+                chartHeight={detailChartHeight}
+                key={"hits"}
               />
             </Paper>
           </Grid>

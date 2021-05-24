@@ -1,8 +1,29 @@
 import React from "react";
 import { ResponsiveLine } from "@nivo/line";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  tooltip: {
+    background: "white",
+    color: "inherit",
+    fontSize: "inherit",
+    borderRadius: "2px",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.25)",
+    padding: "5px 9px"
+  }
+}));
 
 export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
-  console.log(siteData);
+  const classes = useStyles();
+  let yAxisLabel = "MBs Downloaded";
+  if (dataMetric === "hits") {
+    yAxisLabel = "Hits";
+  }
+
+  let tooltipLabel = "MB";
+  if (dataMetric === "hits") {
+    tooltipLabel = "Hits";
+  }
   // format API data for chart dispaly
   const chartData = [];
   // Group the data by URL to create different time series
@@ -23,7 +44,7 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
         let data = item[dataMetric];
         // convert bytes to MB if "bytes_sent"
         if (dataMetric === "bytes_sent") {
-          data = data / 1e6;
+          data = Math.round(data / 1e6);
         }
         return data;
       })
@@ -33,9 +54,9 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
       let data = item[dataMetric];
       // convert bytes to MB if "bytes_sent"
       if (dataMetric === "bytes_sent") {
-        data = data / 1e6;
+        data = Math.round(data / 1e6);
       }
-
+      console.log(data);
       const point = {
         x: item.date,
         y: data
@@ -48,13 +69,13 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
   chartData.sort((a, b) => (a.total_data < b.total_data ? 1 : -1));
   console.log(chartData);
   // get top N download urls
-  const slicedChartData = chartData.slice(0, 10);
+  const slicedChartData = chartData.slice(0, 10).reverse();
 
   return (
     <div style={chartHeight} className="App">
       <ResponsiveLine
         data={slicedChartData}
-        margin={{ top: 20, right: 120, bottom: 50, left: 60 }}
+        margin={{ top: 20, right: 20, bottom: 190, left: 60 }}
         xScale={{
           type: "time",
           format: "%Y-%m-%d"
@@ -75,7 +96,7 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "MBs downloaded",
+          legend: yAxisLabel,
           legendOffset: -40,
           legendPosition: "middle"
         }}
@@ -94,13 +115,25 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
         pointLabel="y"
         pointLabelYOffset={-12}
         useMesh={true}
+        tooltip={input => {
+          console.log(input.point);
+          return (
+            <div className={classes.tooltip}>
+              URL: <strong>{input.point.serieId}</strong> <br />
+              Data:{" "}
+              <strong>
+                {Math.round(input.point.data.y)} {tooltipLabel}
+              </strong>
+            </div>
+          );
+        }}
         legends={[
           {
-            anchor: "bottom-right",
+            anchor: "bottom-left",
             direction: "column",
             justify: false,
-            translateX: 100,
-            translateY: 0,
+            translateX: 0,
+            translateY: 170,
             itemsSpacing: 2,
             itemDirection: "left-to-right",
             itemWidth: 80,
