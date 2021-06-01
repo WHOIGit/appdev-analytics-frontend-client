@@ -5,9 +5,10 @@ export default function ChartTotalData({ siteData, chartHeight }) {
   console.log(siteData);
   const chartData = [{ id: "Daily Downloads", data: [] }];
   chartData[0].data = siteData.total_daily_download_results.map(item => {
+    const date = new Date(item.date);
     // convert bytes to MB
     const point = {
-      x: item.date,
+      x: date,
       y: item.bytes_sent / 1e6
     };
     return point;
@@ -19,8 +20,7 @@ export default function ChartTotalData({ siteData, chartHeight }) {
         data={chartData}
         margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
         xScale={{
-          type: "time",
-          format: "%Y-%m-%d"
+          type: "time"
         }}
         xFormat="time:%Y-%m-%d"
         yScale={{

@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
   loading: {
     padding: theme.spacing(2),
     textAlign: "center"
+  },
+  pageTitle: {
+    margin: 0
   }
 }));
 
@@ -40,7 +43,7 @@ export default function DetailView({ detailViewUrl, query }) {
   if (!data) {
     return null;
   }
-
+  console.log(data);
   return (
     <>
       {isLoading ? (
@@ -49,6 +52,9 @@ export default function DetailView({ detailViewUrl, query }) {
         </Grid>
       ) : (
         <>
+          <Grid item xs={12}>
+            <h1 className={classes.pageTitle}>{data.name}</h1>
+          </Grid>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Title>Total Data Downloads</Title>

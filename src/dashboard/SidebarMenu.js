@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { subDays, format } from "date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -14,6 +15,8 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import LanguageIcon from "@material-ui/icons/Language";
+import green from "@material-ui/core/colors/green";
+import red from "@material-ui/core/colors/red";
 // local imports
 import useApiDataFetch from "../hooks/useApiDataFetch";
 
@@ -22,6 +25,12 @@ const API_URL = process.env.REACT_APP_API_URL;
 const useStyles = makeStyles(theme => ({
   nested: {
     paddingLeft: theme.spacing(4)
+  },
+  activeSites: {
+    color: green[500]
+  },
+  inactiveSites: {
+    color: red[500]
   }
 }));
 
@@ -87,6 +96,20 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
           </ListItem>
           <Collapse in={openSubmenu} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+              <ListItem
+                className={clsx(classes.nested, classes.activeSites)}
+                key={"active-sites"}
+              >
+                <ListItemText primary="Tracking Active" />
+              </ListItem>
+              {data && data.map(item => renderSiteLink(item))}
+
+              <ListItem
+                className={clsx(classes.nested, classes.inactiveSites)}
+                key={"inactive-sites"}
+              >
+                <ListItemText primary="Tracking Not Active" />
+              </ListItem>
               {data && data.map(item => renderSiteLink(item))}
             </List>
           </Collapse>

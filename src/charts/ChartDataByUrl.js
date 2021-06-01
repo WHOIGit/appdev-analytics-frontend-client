@@ -56,9 +56,10 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
       if (dataMetric === "bytes_sent") {
         data = Math.round(data / 1e6);
       }
+      const date = new Date(item.date);
       console.log(data);
       const point = {
-        x: item.date,
+        x: date,
         y: data
       };
       return point;
@@ -77,8 +78,7 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
         data={slicedChartData}
         margin={{ top: 20, right: 20, bottom: 190, left: 60 }}
         xScale={{
-          type: "time",
-          format: "%Y-%m-%d"
+          type: "time"
         }}
         xFormat="time:%Y-%m-%d"
         yScale={{
@@ -116,7 +116,6 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
         pointLabelYOffset={-12}
         useMesh={true}
         tooltip={input => {
-          console.log(input.point);
           return (
             <div className={classes.tooltip}>
               URL: <strong>{input.point.serieId}</strong> <br />
