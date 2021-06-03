@@ -59,7 +59,11 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
     }));
   };
 
-  const renderSiteLink = item => {
+  const renderActiveSiteLink = item => {
+    console.log(item);
+    if (!item.is_active) {
+      return null;
+    }
     return (
       <ListItem
         button
@@ -67,6 +71,21 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
         key={item.id}
         onClick={() => handleDetailView(item.url)}
       >
+        <ListItemIcon>
+          <LanguageIcon />
+        </ListItemIcon>
+        <ListItemText primary={item.name} />
+      </ListItem>
+    );
+  };
+
+  const renderInactiveSite = item => {
+    console.log(item);
+    if (item.is_active) {
+      return null;
+    }
+    return (
+      <ListItem className={classes.nested} key={item.id}>
         <ListItemIcon>
           <LanguageIcon />
         </ListItemIcon>
@@ -102,7 +121,7 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
               >
                 <ListItemText primary="Tracking Active" />
               </ListItem>
-              {data && data.map(item => renderSiteLink(item))}
+              {data && data.map(item => renderActiveSiteLink(item))}
 
               <ListItem
                 className={clsx(classes.nested, classes.inactiveSites)}
@@ -110,7 +129,7 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
               >
                 <ListItemText primary="Tracking Not Active" />
               </ListItem>
-              {data && data.map(item => renderSiteLink(item))}
+              {data && data.map(item => renderInactiveSite(item))}
             </List>
           </Collapse>
         </div>

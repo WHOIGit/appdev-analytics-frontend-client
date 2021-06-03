@@ -41,6 +41,9 @@ export default function HomeView({ query }) {
   }, [query, doFetch]);
 
   const renderDataCharts = site => {
+    if (!site.is_active) {
+      return null;
+    }
     return (
       <Grid item xs={12} md={4} key={site.id}>
         <Paper className={classes.paper}>

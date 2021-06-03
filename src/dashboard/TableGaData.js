@@ -18,30 +18,32 @@ export default function TableGaData({ data }) {
   const classes = useStyles();
 
   // format GA data for tabular display
-  const tableData = data.map(item => {
-    const tableRow = {
-      site: item.name,
-      topCountry: "",
-      activeUsers: "",
-      pageViews: ""
-    };
-    if (!item.ga_results.rows.length) {
+  const tableData = data
+    .filter(item => item.is_active)
+    .map(item => {
+      const tableRow = {
+        site: item.name,
+        topCountry: "",
+        activeUsers: "",
+        pageViews: ""
+      };
+      if (!item.ga_results.rows.length) {
+        return tableRow;
+      }
+      tableRow.topCountry = item.ga_results.rows[0].dimension_values[0].value;
+
+      const activeUsers = item.ga_results.rows
+        .map(row => parseInt(row.metric_values[0].value))
+        .reduce((a, b) => a + b, 0);
+      tableRow.activeUsers = activeUsers;
+
+      const pageViews = item.ga_results.rows
+        .map(row => parseInt(row.metric_values[1].value))
+        .reduce((a, b) => a + b, 0);
+      tableRow.pageViews = pageViews;
+
       return tableRow;
-    }
-    tableRow.topCountry = item.ga_results.rows[0].dimension_values[0].value;
-
-    const activeUsers = item.ga_results.rows
-      .map(row => parseInt(row.metric_values[0].value))
-      .reduce((a, b) => a + b, 0);
-    tableRow.activeUsers = activeUsers;
-
-    const pageViews = item.ga_results.rows
-      .map(row => parseInt(row.metric_values[1].value))
-      .reduce((a, b) => a + b, 0);
-    tableRow.pageViews = pageViews;
-
-    return tableRow;
-  });
+    });
   console.log(tableData);
   return (
     <React.Fragment>
