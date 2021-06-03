@@ -34,7 +34,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
+export default function SidebarMenu({
+  setDetailViewUrl,
+  query,
+  setQuery,
+  openDrawer
+}) {
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
@@ -115,20 +120,25 @@ export default function SidebarMenu({ setDetailViewUrl, query, setQuery }) {
           </ListItem>
           <Collapse in={openSubmenu} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem
-                className={clsx(classes.nested, classes.activeSites)}
-                key={"active-sites"}
-              >
-                <ListItemText primary="Tracking Active" />
-              </ListItem>
+              {openDrawer && (
+                <ListItem
+                  className={clsx(classes.nested, classes.activeSites)}
+                  key={"active-sites"}
+                >
+                  <ListItemText primary="Tracking Active" />
+                </ListItem>
+              )}
+
               {data && data.map(item => renderActiveSiteLink(item))}
 
-              <ListItem
-                className={clsx(classes.nested, classes.inactiveSites)}
-                key={"inactive-sites"}
-              >
-                <ListItemText primary="Tracking Not Active" />
-              </ListItem>
+              {openDrawer && (
+                <ListItem
+                  className={clsx(classes.nested, classes.inactiveSites)}
+                  key={"inactive-sites"}
+                >
+                  <ListItemText primary="Tracking Not Active" />
+                </ListItem>
+              )}
               {data && data.map(item => renderInactiveSite(item))}
             </List>
           </Collapse>

@@ -185,6 +185,7 @@ export default function Dashboard() {
           setDetailViewUrl={setDetailViewUrl}
           query={query}
           setQuery={setQuery}
+          openDrawer={openDrawer}
         />
         <DatePicker
           startDate={startDate}
