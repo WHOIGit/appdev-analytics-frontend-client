@@ -83,7 +83,7 @@ export default function ChartDataByUrl({ siteData, dataMetric, chartHeight }) {
         xFormat="time:%Y-%m-%d"
         yScale={{
           type: "linear",
-          min: "auto",
+          min: 0,
           max: "auto",
           stacked: false,
           reverse: false
