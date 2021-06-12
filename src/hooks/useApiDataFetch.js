@@ -10,12 +10,20 @@ export default function useApiDataFetch(initialUrl, initalQuery) {
   const [isError, setIsError] = useState(false);
 
   const buildApiRequest = (url, query) => {
-    console.log(query);
     setUrl(url);
     query && setQuery(query);
   };
 
   useEffect(() => {
+    const setupParams = query => {
+      const queryParams = {
+        ...query,
+        startDate: format(query.startDate, "yyyy-MM-dd"),
+        endDate: format(query.endDate, "yyyy-MM-dd")
+      };
+      return queryParams;
+    };
+
     const fetchData = async () => {
       setIsError(false);
       setIsLoading(true);
@@ -23,10 +31,7 @@ export default function useApiDataFetch(initialUrl, initalQuery) {
       try {
         console.log(url);
         const result = await axios(url, {
-          params: {
-            start_date: format(query.startDate, "yyyy-MM-dd"),
-            end_date: format(query.endDate, "yyyy-MM-dd")
-          }
+          params: setupParams(query)
         });
         console.log(result);
         setData(result.data);

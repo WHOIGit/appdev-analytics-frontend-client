@@ -29,10 +29,15 @@ const useStyles = makeStyles(theme => ({
 export default function HomeView({ query }) {
   const classes = useStyles();
   const chartHeight = { height: 250 };
-  console.log(query);
+  // set API query parameters to omit GA data as it can load slowly,
+  // defer GA data load to Table component
+  const homeQuery = {
+    ...query,
+    omit: "ga_results"
+  };
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
     API_URL,
-    query
+    homeQuery
   );
 
   console.log(data);
@@ -66,7 +71,7 @@ export default function HomeView({ query }) {
 
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              {data && <TableGaData data={data} />}
+              {data && <TableGaData query={query} />}
             </Paper>
           </Grid>
         </>

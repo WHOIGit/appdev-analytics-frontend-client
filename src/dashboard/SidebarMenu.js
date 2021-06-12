@@ -40,11 +40,16 @@ export default function SidebarMenu({
   setQuery,
   openDrawer
 }) {
+  // set API query parameters to select specific fields to return
+  const menuQuery = {
+    ...query,
+    fields: "id,name,url,is_active"
+  };
   const classes = useStyles();
   const [openSubmenu, setOpenSubmenu] = useState(true);
   const [{ data, isLoading, isError }, doFetch] = useApiDataFetch(
     API_URL,
-    query
+    menuQuery
   );
 
   const handleSubmenuClick = () => {
@@ -65,7 +70,6 @@ export default function SidebarMenu({
   };
 
   const renderActiveSiteLink = item => {
-    console.log(item);
     if (!item.is_active) {
       return null;
     }
@@ -85,7 +89,6 @@ export default function SidebarMenu({
   };
 
   const renderInactiveSite = item => {
-    console.log(item);
     if (item.is_active) {
       return null;
     }
